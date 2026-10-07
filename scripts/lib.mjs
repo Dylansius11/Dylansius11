@@ -1,0 +1,157 @@
+import { readFileSync } from "node:fs";
+
+/**
+ * Shared pieces for every SVG on the profile.
+ *
+ * GitHub shows a README image through its camo proxy as a plain <img>, so an
+ * SVG gets no scripts, no external requests and no hover. What it does keep is
+ * CSS: keyframes, transforms and media queries all run. Everything that moves
+ * on this profile is CSS inside the file, and both typefaces are embedded as
+ * base64 so the file needs nothing else to render.
+ *
+ * Same system as the portfolio (dylansiusputra.vercel.app): bone and ink, one
+ * violet, one signal colour that only ever appears on ink.
+ */
+
+const root = new URL("..", import.meta.url);
+const M = JSON.parse(readFileSync(new URL("scripts/metrics.json", root), "utf8"));
+const b64 = (p) => readFileSync(new URL(p, root)).toString("base64");
+
+export const W = 1000;
+export const PAD = 40;
+
+const FONTS =
+  `@font-face{font-family:TT;font-weight:400 700;src:url(data:font/woff2;base64,${b64("fonts/tiktok-sans.woff2")}) format("woff2")}` +
+  `@font-face{font-family:DM;src:url(data:font/woff2;base64,${b64("fonts/departure-mono.woff2")}) format("woff2")}`;
+
+/** Only the mono face, for the small badges. Saves 30kB per badge. */
+const MONO_ONLY = `@font-face{font-family:DM;src:url(data:font/woff2;base64,${b64("fonts/departure-mono.woff2")}) format("woff2")}`;
+
+export const THEMES = {
+  light: {
+    bg: "#F8F7F4",
+    fg: "#0A0A0A",
+    sub: "rgba(10,10,10,0.58)",
+    faint: "rgba(10,10,10,0.12)",
+    dot: "rgba(10,10,10,0.16)",
+    violet: "#5E0ED7",
+    mark: "rgba(94,14,215,0.16)",
+    ink: "#0A0A0A",
+    inkLine: "rgba(248,247,244,0.16)",
+    onInk: "#F8F7F4",
+    onInkSub: "rgba(248,247,244,0.58)",
+    signal: "#C8FF3D",
+  },
+  dark: {
+    bg: "#0A0A0A",
+    fg: "#F8F7F4",
+    sub: "rgba(248,247,244,0.6)",
+    faint: "rgba(248,247,244,0.14)",
+    dot: "rgba(248,247,244,0.14)",
+    violet: "#A47BFF",
+    mark: "rgba(164,123,255,0.26)",
+    ink: "#141414",
+    inkLine: "rgba(248,247,244,0.16)",
+    onInk: "#F8F7F4",
+    onInkSub: "rgba(248,247,244,0.58)",
+    signal: "#C8FF3D",
+  },
+};
+
+/** The site's two curves. `out` is --ease, `snap` is --ease-snap. */
+export const EASE = {
+  out: "cubic-bezier(0.16,1,0.3,1)",
+  snap: "cubic-bezier(0.7,0,0.2,1)",
+};
+
+/**
+ * Width of a run of text in px, from the real advance widths of the embedded
+ * fonts (scripts/metrics.json). `track` is letter-spacing in em.
+ */
+export function measure(text, size, { w = 600, mono = false, track = 0 } = {}) {
+  const table = mono ? M.mono : M[`sans${w}`];
+  let adv = 0;
+  for (const ch of text) adv += table[ch] ?? table["n"];
+  return adv * size + track * size * Math.max(0, [...text].length - 1);
+}
+
+/** Greedy word wrap against a measured width. */
+export function wrap(text, size, maxW, opts = {}) {
+  const lines = [];
+  let line = "";
+  for (const word of text.split(" ")) {
+    const next = line ? `${line} ${word}` : word;
+    if (line && measure(next, size, opts) > maxW) {
+      lines.push(line);
+      line = word;
+    } else line = next;
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+export const esc = (s) =>
+  String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+/** Uppercase mono label, the site's `t-system`. */
+export function label(x, y, text, { size = 13, fill, anchor = "start", track = 0.14, cls = "", style = "" } = {}) {
+  return `<text class="m ${cls}" x="${x}" y="${y}" font-size="${size}" letter-spacing="${track}em" fill="${fill}" text-anchor="${anchor}"${style ? ` style="${style}"` : ""}>${esc(text.toUpperCase())}</text>`;
+}
+
+/** Sans text. */
+export function sans(x, y, text, { size = 20, w = 500, fill, anchor = "start", track = 0, cls = "", style = "" } = {}) {
+  return `<text class="s ${cls}" x="${x}" y="${y}" font-size="${size}" font-weight="${w}" letter-spacing="${track}em" fill="${fill}" text-anchor="${anchor}"${style ? ` style="${style}"` : ""}>${esc(text)}</text>`;
+}
+
+/** Fine dot field, the portfolio's background texture. */
+export function dots(id, t, w, h, gap = 22) {
+  return (
+    `<defs><pattern id="${id}" width="${gap}" height="${gap}" patternUnits="userSpaceOnUse">` +
+    `<circle cx="${gap / 2}" cy="${gap / 2}" r="0.9" fill="${t.dot}"/></pattern></defs>` +
+    `<rect width="${w}" height="${h}" fill="url(#${id})"/>`
+  );
+}
+
+/** A grid crosshair, as on the portfolio's overlay. */
+export function cross(x, y, stroke, cls = "") {
+  return `<g class="${cls}" stroke="${stroke}" stroke-width="1"><line x1="${x - 6}" y1="${y}" x2="${x + 6}" y2="${y}"/><line x1="${x}" y1="${y - 6}" x2="${x}" y2="${y + 6}"/></g>`;
+}
+
+/**
+ * One odometer column. Digits 0..9 stacked at `step`, clipped to one cell,
+ * rolled to `to` by a keyframe named per target so no CSS variables are needed
+ * inside @keyframes. `spins` adds full turns so a target of 0 still moves.
+ */
+export function odometerColumn(id, x, y, digit, { size, step, w = 600, fill, delay = 0, dur = 1.6, spins = 0 }) {
+  const cells = 10 * (spins + 1);
+  const target = spins * 10 + digit;
+  const rows = Array.from({ length: cells + 1 }, (_, i) => sans(0, (i + 1) * step - (step - size * 0.72) / 2, String(i % 10), { size, w, fill })).join("");
+  const width = measure("0", size, { w }) + 2;
+  return (
+    `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${width}" height="${step}"/></clipPath>` +
+    `<g clip-path="url(#${id})"><g transform="translate(${x} ${y})">` +
+    `<g class="roll" style="--to:${-target * step}px;animation:roll-${id} ${dur}s ${EASE.out} ${delay}s both">${rows}</g>` +
+    `</g></g>` +
+    `<style>@keyframes roll-${id}{from{transform:translateY(0)}to{transform:translateY(${-target * step}px)}}</style>`
+  );
+}
+
+/**
+ * Wrap a body in an <svg> with the fonts, the base classes and the
+ * reduced-motion path: every animation jumps to its end state.
+ */
+export function svg({ w = W, h, title, desc, css = "", body, monoOnly = false }) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-labelledby="t d" fill="none">
+<title id="t">${esc(title)}</title>
+<desc id="d">${esc(desc)}</desc>
+<style>${monoOnly ? MONO_ONLY : FONTS}
+.s{font-family:TT,"Helvetica Neue",Arial,sans-serif;font-kerning:normal}
+.m{font-family:DM,ui-monospace,Menlo,monospace}
+.roll{transform-box:view-box}
+${css}
+@media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
+</style>
+${body}
+</svg>
+`;
+}
