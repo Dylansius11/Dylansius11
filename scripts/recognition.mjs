@@ -1,4 +1,4 @@
-import { EASE, PAD, W, esc, label, measure, odometerColumn, sans, svg, wrap } from "./lib.mjs";
+import { EASE, PAD, W, flowRail, label, measure, odometerColumn, sans, svg, wrap } from "./lib.mjs";
 
 /**
  * Recognition. Same order and hierarchy as the portfolio, at Dylan's call:
@@ -93,28 +93,9 @@ export function recognition(t) {
   wrap("A verifier clears each transaction virtually. Wrong or failed ones never move money.", 15, rw, { w: 400 }).forEach((ln, i) =>
     parts.push(sans(rx, ay + 208 + i * 22, ln, { size: 15, w: 400, fill: t.onInkSub })),
   );
-  const fy = ay + 268;
-  const gap = rw / (MANDATE.length - 1);
-  parts.push(`<line x1="${rx}" y1="${fy}" x2="${rx + rw}" y2="${fy}" stroke="${t.inkLine}"/>`);
-  parts.push(`<rect class="comet" x="${rx}" y="${fy - 1}" width="40" height="2" fill="${t.signal}"/>`);
-  css.push(
-    `.comet{animation:comet ${CYCLE}s linear infinite}@keyframes comet{0%{transform:translateX(0);opacity:0}6%{opacity:1}72%{transform:translateX(${rw - 40}px);opacity:1}80%,100%{transform:translateX(${rw - 40}px);opacity:0}}`,
-  );
-  MANDATE.forEach((n, i) => {
-    const nx = rx + i * gap;
-    const at = (i / (MANDATE.length - 1)) * 0.72;
-    const p0 = Math.round(at * 100);
-    css.push(
-      `.nd${i}{animation:nd${i} ${CYCLE}s linear infinite}@keyframes nd${i}{0%,${Math.max(0, p0 - 1)}%{fill:${t.ink};stroke:${t.onInkSub}}${p0}%,${Math.min(99, p0 + 20)}%{fill:${t.signal};stroke:${t.signal}}${Math.min(100, p0 + 30)}%,100%{fill:${t.ink};stroke:${t.onInkSub}}}`,
-    );
-    const anchor = i === 0 ? "start" : i === MANDATE.length - 1 ? "end" : "middle";
-    parts.push(`<rect class="nd${i}" x="${nx - 5}" y="${fy - 5}" width="10" height="10" stroke-width="1"/>`);
-    parts.push(sans(nx, fy + 30, n.k, { size: 15, w: 600, fill: t.onInk, anchor }));
-    // Each node's note wraps inside its own share of the rail.
-    wrap(n.v.toUpperCase(), 11, gap - 22, { mono: true, track: 0.08 }).forEach((ln, k) =>
-      parts.push(label(nx, fy + 50 + k * 16, ln, { size: 11, fill: t.onInkSub, anchor, track: 0.08 })),
-    );
-  });
+  const rail = flowRail("md", t, rx, ay + 268, rw, MANDATE, { cycle: CYCLE });
+  parts.push(rail.markup);
+  css.push(rail.css);
 
   // ── Tiles B and C ──
   const by = ay + ah + 20;
@@ -211,8 +192,7 @@ export function recognition(t) {
     h: H,
     title: "Recognized. Sponsor prize at ETHOnline, runner-up at Coinfest Asia, double winner at Monad Blitz Jakarta.",
     desc:
-      "Sponsor prize at ETHOnline out of 1,700 participants, for Mandate, which lets an AI agent spend from a treasury it never holds. Runner-up at Coinfest Asia Hackathon in Bali for AgentDesk. Double winner at Monad Blitz Jakarta with MonadBoy and SnapStock. Also: winner of the National Campus Hackathon, 1st of 80+ at Grab Next Generation, top 7 national at Hacktiv8 x Meta Llama Accelerator, finalist at the Kemenkop Hackathon. " +
-      esc(""),
+      "Sponsor prize at ETHOnline out of 1,700 participants, for Mandate, which lets an AI agent spend from a treasury it never holds. Runner-up at Coinfest Asia Hackathon in Bali for AgentDesk. Double winner at Monad Blitz Jakarta with MonadBoy and SnapStock. Also: winner of the National Campus Hackathon, 1st of 80+ at Grab Next Generation, top 7 national at Hacktiv8 x Meta Llama Accelerator, finalist at the Kemenkop Hackathon.",
     css: css.join("\n"),
     body: parts.join("\n"),
   });

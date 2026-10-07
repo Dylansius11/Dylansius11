@@ -170,3 +170,44 @@ ${body}
 </svg>
 `;
 }
+
+/**
+ * A product's mechanism as four steps on a rail, with a comet that travels it
+ * on a loop and lights each node as it passes. The portfolio's flow plate,
+ * for products that have no honest screenshot. Returns markup and its CSS.
+ */
+export function flowRail(id, t, x, y, w, nodes, { cycle = 4.2, on = "ink" } = {}) {
+  const parts = [];
+  const css = [];
+  const fg = on === "ink" ? t.onInk : t.fg;
+  const sub = on === "ink" ? t.onInkSub : t.sub;
+  const base = on === "ink" ? t.ink : t.bg;
+  const rail = on === "ink" ? t.inkLine : t.faint;
+  const gap = w / (nodes.length - 1);
+  parts.push(`<line x1="${x}" y1="${y}" x2="${x + w}" y2="${y}" stroke="${rail}"/>`);
+  parts.push(`<rect class="${id}-c" x="${x}" y="${y - 1}" width="40" height="2" fill="${t.signal}"/>`);
+  css.push(
+    `.${id}-c{animation:${id}-c ${cycle}s linear infinite}@keyframes ${id}-c{0%{transform:translateX(0);opacity:0}6%{opacity:1}72%{transform:translateX(${w - 40}px);opacity:1}80%,100%{transform:translateX(${w - 40}px);opacity:0}}`,
+  );
+  nodes.forEach((n, i) => {
+    const nx = x + i * gap;
+    const p0 = Math.round((i / (nodes.length - 1)) * 72);
+    css.push(
+      `.${id}-n${i}{animation:${id}-n${i} ${cycle}s linear infinite}@keyframes ${id}-n${i}{0%,${Math.max(0, p0 - 1)}%{fill:${base};stroke:${sub}}${p0}%,${Math.min(99, p0 + 20)}%{fill:${t.signal};stroke:${t.signal}}${Math.min(100, p0 + 30)}%,100%{fill:${base};stroke:${sub}}}`,
+    );
+    const anchor = i === 0 ? "start" : i === nodes.length - 1 ? "end" : "middle";
+    parts.push(`<rect class="${id}-n${i}" x="${nx - 5}" y="${y - 5}" width="10" height="10" stroke-width="1"/>`);
+    parts.push(sans(nx, y + 30, n.k, { size: 15, w: 600, fill: fg, anchor }));
+    // An end node's note runs left by its full width and a middle node's by
+    // half, so two neighbours share one gap: 0.6 of it each keeps them apart.
+    wrap(n.v.toUpperCase(), 11, gap * 0.6 - 6, { mono: true, track: 0.08 }).forEach((ln, k) =>
+      parts.push(label(nx, y + 50 + k * 16, ln, { size: 11, fill: sub, anchor, track: 0.08 })),
+    );
+  });
+  return { markup: parts.join(""), css: css.join("\n") };
+}
+
+/** An image file as a data URI, for embedding real captures. */
+export function dataUri(path, type = "image/webp") {
+  return `data:${type};base64,${b64(path)}`;
+}
