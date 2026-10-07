@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { THEMES } from "./lib.mjs";
 import { header } from "./header.mjs";
+import { recognition } from "./recognition.mjs";
 
 /**
  * Builds every SVG on the profile, once per theme.
@@ -13,7 +14,7 @@ import { header } from "./header.mjs";
 const OUT = new URL("../assets/", import.meta.url);
 mkdirSync(OUT, { recursive: true });
 
-const ASSETS = { header };
+const ASSETS = { header, recognition };
 
 for (const [name, make] of Object.entries(ASSETS)) {
   for (const [theme, t] of Object.entries(THEMES)) {

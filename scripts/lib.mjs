@@ -122,19 +122,34 @@ export function cross(x, y, stroke, cls = "") {
  * rolled to `to` by a keyframe named per target so no CSS variables are needed
  * inside @keyframes. `spins` adds full turns so a target of 0 still moves.
  */
-export function odometerColumn(id, x, y, digit, { size, step, w = 600, fill, delay = 0, dur = 1.6, spins = 0 }) {
+export function odometerColumn(
+  id,
+  x,
+  y,
+  digit,
+  { size, step, w = 600, fill, delay = 0, dur = 1.6, spins = 0, from = 0, loop = 0 },
+) {
   const cells = 10 * (spins + 1);
   const target = spins * 10 + digit;
   const rows = Array.from({ length: cells + 1 }, (_, i) => sans(0, (i + 1) * step - (step - size * 0.72) / 2, String(i % 10), { size, w, fill })).join("");
   const width = measure("0", size, { w }) + 2;
   return (
-    `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${width}" height="${step}"/></clipPath>` +
+    // A little slack each side, so a glyph with a negative side bearing is not shaved.
+    `<clipPath id="${id}"><rect x="${x - 8}" y="${y}" width="${width + 16}" height="${step}"/></clipPath>` +
     `<g clip-path="url(#${id})"><g transform="translate(${x} ${y})">` +
-    `<g class="roll" style="--to:${-target * step}px;animation:roll-${id} ${dur}s ${EASE.out} ${delay}s both">${rows}</g>` +
+    `<g class="roll" style="animation:roll-${id} ${loop ? `${loop}s ${EASE.snap} 0s infinite` : `${dur}s ${EASE.out} ${delay}s both`}">${rows}</g>` +
     `</g></g>` +
-    `<style>@keyframes roll-${id}{from{transform:translateY(0)}to{transform:translateY(${-target * step}px)}}</style>`
+    `<style>${
+      loop
+        ? // Hold on `from`, roll, hold on the target, then start over. The jump
+          // back happens at the loop boundary, so it reads as ticking over again.
+          `@keyframes roll-${id}{0%,${pct(delay, loop)}%{transform:translateY(${-from * step}px)}${pct(delay + dur, loop)}%,100%{transform:translateY(${-target * step}px)}}`
+        : `@keyframes roll-${id}{from{transform:translateY(${-from * step}px)}to{transform:translateY(${-target * step}px)}}`
+    }</style>`
   );
 }
+
+const pct = (t, period) => Math.min(99, Math.round((t / period) * 100));
 
 /**
  * Wrap a body in an <svg> with the fonts, the base classes and the
