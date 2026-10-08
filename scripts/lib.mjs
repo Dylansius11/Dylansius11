@@ -127,15 +127,18 @@ export function odometerColumn(
   x,
   y,
   digit,
-  { size, step, w = 600, fill, delay = 0, dur = 1.6, spins = 0, from = 0, loop = 0 },
+  { size, step, w = 600, fill, delay = 0, dur = 1.6, spins = 0, from = 0, loop = 0, clip = null },
 ) {
   const cells = 10 * (spins + 1);
   const target = spins * 10 + digit;
   const rows = Array.from({ length: cells + 1 }, (_, i) => sans(0, (i + 1) * step - (step - size * 0.72) / 2, String(i % 10), { size, w, fill })).join("");
   const width = measure("0", size, { w }) + 2;
+  // `clip` is [left, right] relative to x. A column set tighter than a full
+  // digit is cut at its own advance, so a wide digit rolling past cannot
+  // spill into its neighbour.
   return (
     // A little slack each side, so a glyph with a negative side bearing is not shaved.
-    `<clipPath id="${id}"><rect x="${x - 8}" y="${y}" width="${width + 16}" height="${step}"/></clipPath>` +
+    `<clipPath id="${id}"><rect x="${x + (clip ? clip[0] : -8)}" y="${y}" width="${clip ? clip[1] - clip[0] : width + 16}" height="${step}"/></clipPath>` +
     `<g clip-path="url(#${id})"><g transform="translate(${x} ${y})">` +
     `<g class="roll" style="animation:roll-${id} ${loop ? `${loop}s ${EASE.snap} 0s infinite` : `${dur}s ${EASE.out} ${delay}s both`}">${rows}</g>` +
     `</g></g>` +
