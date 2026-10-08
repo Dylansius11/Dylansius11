@@ -101,7 +101,7 @@ export function header(t) {
   });
   const cy = by + lines.length * 26 + 4;
   parts.push(
-    `<text class="s" x="${bx}" y="${cy}" font-size="17" font-weight="400" fill="${t.sub}">Check <tspan fill="${t.fg}" font-weight="600">crescens.dev</tspan> for details ↗</text>`,
+    `<text class="s" x="${bx}" y="${cy}" font-size="17" font-weight="400" fill="${t.sub}">Check <tspan fill="${t.fg}" font-weight="600">crescens.dev</tspan> for details <tspan class="m">↗</tspan></text>`,
   );
   const cw0 = measure("Check ", 17, { w: 400 });
   parts.push(`<rect class="uline" x="${bx + cw0}" y="${cy + 5}" width="${measure("crescens.dev", 17, { w: 600 })}" height="1.5" fill="${t.violet}"/>`);

@@ -118,7 +118,11 @@ export function clients(t) {
       ly += 24;
     });
     if (c.stat) {
-      parts.push(sans(x, ly + 30, c.stat.v, { size: 34, w: 700, fill: t.violet, track: -0.04 }));
+      // TikTok Sans has no arrow in this subset, so the arrow is set in the mono face.
+      const [a, b] = c.stat.v.split(" → ");
+      parts.push(
+        `<text class="s" x="${x}" y="${ly + 30}" font-size="34" font-weight="700" letter-spacing="-0.04em" fill="${t.violet}">${a} <tspan class="m" font-weight="400">→</tspan> ${b}</text>`,
+      );
       // The arrow is not in the metrics table, so it is measured as a wide glyph.
       parts.push(label(x + measure(c.stat.v.replace("→", "MM"), 34, { w: 700, track: -0.04 }) + 14, ly + 27, c.stat.l, { size: 11, fill: t.sub }));
       ly += 44;
@@ -144,7 +148,9 @@ export function clients(t) {
   const sy = y;
   parts.push(`<line x1="${PAD}" y1="${sy}" x2="${W - PAD}" y2="${sy}" stroke="${t.faint}"/>`);
   parts.push(sans(PAD, sy + 40, "Both built under Crescens Labs, the studio I co-founded.", { size: 17, w: 400, fill: t.sub }));
-  parts.push(sans(W - PAD, sy + 42, "crescens.dev ↗", { size: 24, w: 600, fill: t.fg, anchor: "end", track: -0.03 }));
+  parts.push(
+    `<text class="s" x="${W - PAD}" y="${sy + 42}" font-size="24" font-weight="600" letter-spacing="-0.03em" fill="${t.fg}" text-anchor="end">crescens.dev <tspan class="m" font-weight="400">↗</tspan></text>`,
+  );
   parts.push(`<line x1="${PAD}" y1="${sy + 66}" x2="${W - PAD}" y2="${sy + 66}" stroke="${t.faint}"/>`);
   const H = sy + 70;
 
