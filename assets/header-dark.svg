@@ -58,12 +58,12 @@
 <text class="s " x="690.6666666666666" y="188" font-size="17" font-weight="400" letter-spacing="0em" fill="rgba(248,247,244,0.6)" text-anchor="start">&amp; biz with fullstack and leadership</text>
 <text class="s " x="690.6666666666666" y="214" font-size="17" font-weight="400" letter-spacing="0em" fill="rgba(248,247,244,0.6)" text-anchor="start">capabilities. Now running</text>
 <text class="s" x="690.6666666666666" y="240" font-size="17" font-weight="400" fill="rgba(248,247,244,0.6)"><tspan fill="#A47BFF" font-weight="600">Crescens Labs</tspan>, an E2E dev studio.</text>
-<text class="s" x="690.6666666666666" y="270" font-size="17" font-weight="400" fill="rgba(248,247,244,0.6)">Check <tspan fill="#F8F7F4" font-weight="600">crescens.dev</tspan> for details <tspan class="m">↗</tspan></text>
+<text class="s" x="690.6666666666666" y="270" font-size="17" font-weight="400" fill="rgba(248,247,244,0.6)">Check <tspan fill="#F8F7F4" font-weight="600">crescens.dev</tspan> for details</text>
 <rect class="uline" x="742.1426666666666" y="275" width="102.27200000000002" height="1.5" fill="#A47BFF"/>
 </g>
 <g class="settle-url">
 <line x1="690.6666666666666" y1="340" x2="960" y2="340" stroke="rgba(248,247,244,0.14)"/>
-<text class="m " x="690.6666666666666" y="362" font-size="12" letter-spacing="0.14em" fill="rgba(248,247,244,0.6)" text-anchor="start">FULL PORTFOLIO ↗</text>
+<text class="m " x="690.6666666666666" y="362" font-size="12" letter-spacing="0.14em" fill="rgba(248,247,244,0.6)" text-anchor="start">FULL PORTFOLIO</text>
 <text class="s " x="690.6666666666666" y="392" font-size="24.639404751013938" font-weight="600" letter-spacing="-0.03em" fill="#F8F7F4" text-anchor="start">dylansiusputra.vercel.app</text>
 <rect class="uline-url" x="690.6666666666666" y="400" width="269.33333333333337" height="2" fill="#A47BFF"/>
 </g>

@@ -101,7 +101,7 @@ export function header(t) {
   });
   const cy = by + lines.length * 26 + 4;
   parts.push(
-    `<text class="s" x="${bx}" y="${cy}" font-size="17" font-weight="400" fill="${t.sub}">Check <tspan fill="${t.fg}" font-weight="600">crescens.dev</tspan> for details <tspan class="m">↗</tspan></text>`,
+    `<text class="s" x="${bx}" y="${cy}" font-size="17" font-weight="400" fill="${t.sub}">Check <tspan fill="${t.fg}" font-weight="600">crescens.dev</tspan> for details</text>`,
   );
   const cw0 = measure("Check ", 17, { w: 400 });
   parts.push(`<rect class="uline" x="${bx + cw0}" y="${cy + 5}" width="${measure("crescens.dev", 17, { w: 600 })}" height="1.5" fill="${t.violet}"/>`);
@@ -114,7 +114,7 @@ export function header(t) {
   const us = Math.min(26, bw / measure(url, 1, { w: 600, track: -0.03 }));
   parts.push(`<g class="settle-url">`);
   parts.push(`<line x1="${bx}" y1="${uy - 52}" x2="${W - PAD}" y2="${uy - 52}" stroke="${t.faint}"/>`);
-  parts.push(label(bx, uy - 30, "Full portfolio ↗", { size: 12, fill: t.sub }));
+  parts.push(label(bx, uy - 30, "Full portfolio", { size: 12, fill: t.sub }));
   parts.push(sans(bx, uy, url, { size: us, w: 600, fill: t.fg, track: -0.03 }));
   parts.push(`<rect class="uline-url" x="${bx}" y="${uy + 8}" width="${bw}" height="2" fill="${t.violet}"/>`);
   parts.push(`</g>`);

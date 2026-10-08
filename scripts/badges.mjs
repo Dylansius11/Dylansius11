@@ -22,8 +22,9 @@ const TRACK = 0.14;
 export function badge(b, i) {
   return (t) => {
     const word = b.text.toUpperCase();
-    const arrow = b.arrow ?? "↗";
-    const tw = measure(`${word} ${arrow}`, SIZE, { mono: true, track: TRACK });
+    // Only the CV carries an arrow: it is the one link that downloads.
+    const text = b.arrow ? `${word} ${b.arrow}` : word;
+    const tw = measure(text, SIZE, { mono: true, track: TRACK });
     const w = Math.ceil(tw + 50);
     const bg = b.primary ? t.ink : t.bg;
     const fg = b.primary ? t.onInk : t.fg;
@@ -42,7 +43,7 @@ export function badge(b, i) {
       body:
         `<rect x=".5" y=".5" width="${w - 1}" height="${H - 1}" fill="${bg}" stroke="${stroke}"/>` +
         `<rect class="dt" x="16" y="${H / 2 - 4}" width="8" height="8" fill="${dot}"/>` +
-        `<text class="m" x="34" y="${H / 2 + 5}" font-size="${SIZE}" letter-spacing="${TRACK}em" fill="${fg}">${esc(word)} ${arrow}</text>`,
+        `<text class="m" x="34" y="${H / 2 + 5}" font-size="${SIZE}" letter-spacing="${TRACK}em" fill="${fg}">${esc(text)}</text>`,
     });
   };
 }
