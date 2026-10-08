@@ -56,7 +56,7 @@ export function clients(t) {
 
   // Head.
   parts.push(`<line x1="${PAD}" y1="46" x2="${PAD + 28}" y2="46" stroke="${t.violet}" stroke-width="2"/>`);
-  parts.push(label(PAD + 40, 51, "Client work", { fill: t.sub }));
+  parts.push(label(PAD + 40, 51, "03 · Client work", { fill: t.sub }));
   parts.push(`<g class="rise-in">${sans(PAD, 118, "Paid work.", { size: 56, w: 600, fill: t.fg, track: -0.04 })}</g>`);
   const k = INTRO.indexOf(MARK);
   const mx = PAD + measure(INTRO.slice(0, k), 18, { w: 400 });

@@ -1,4 +1,4 @@
-import { EASE, dataUri, flowRail, label, measure, sans, svg, wrap } from "./lib.mjs";
+import { EASE, PAD, dataUri, flowRail, label, measure, sans, svg, wrap } from "./lib.mjs";
 
 /**
  * Selected work, one card per product, each its own SVG so the README can
@@ -165,4 +165,30 @@ export function card(c, index) {
       body: parts.join("\n"),
     });
   };
+}
+
+/** The head that sits above the cards, set like every other section head. */
+export function workHead(t) {
+  const intro = "Web3, AI agents and local commerce. Every card links to the real thing.";
+  const mark = "Every card links to the real thing.";
+  const mx = PAD + measure(intro.slice(0, intro.indexOf(mark)), 18, { w: 400 });
+  return svg({
+    h: 190,
+    title: "Selected Work.",
+    desc: intro,
+    css: `
+.rise-in{animation:risein 1s ${EASE.out} both}
+.fade-in{animation:fadein .9s ${EASE.out} .2s both}
+.mark{transform-box:fill-box;transform-origin:0 50%;animation:sweep .9s ${EASE.snap} .8s both}
+@keyframes risein{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}`,
+    body: [
+      `<line x1="${PAD}" y1="46" x2="${PAD + 28}" y2="46" stroke="${t.violet}" stroke-width="2"/>`,
+      label(PAD + 40, 51, "01 · Selected Work", { fill: t.sub }),
+      `<g class="rise-in">${sans(PAD, 118, "Selected Work.", { size: 56, w: 600, fill: t.fg, track: -0.04 })}</g>`,
+      `<rect class="mark" x="${mx - 2}" y="145" width="${measure(mark, 18, { w: 400 }) + 4}" height="20" fill="${t.mark}"/>`,
+      `<g class="fade-in">${sans(PAD, 160, intro, { size: 18, w: 400, fill: t.sub })}</g>`,
+    ].join("\n"),
+  });
 }

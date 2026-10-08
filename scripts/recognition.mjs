@@ -43,7 +43,7 @@ export function recognition(t) {
 
   // Head.
   parts.push(`<line x1="${PAD}" y1="46" x2="${PAD + 28}" y2="46" stroke="${t.violet}" stroke-width="2"/>`);
-  parts.push(label(PAD + 40, 51, "Recognition", { fill: t.sub }));
+  parts.push(label(PAD + 40, 51, "02 · Recognition", { fill: t.sub }));
   parts.push(`<g class="rise-in">` + sans(PAD, 118, "Recognized.", { size: 56, w: 600, fill: t.fg, track: -0.04 }) + `</g>`);
   wrap(INTRO, 18, 640, { w: 400 }).forEach((ln, i) => {
     const k = ln.indexOf("same name on the list");

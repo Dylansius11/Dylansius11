@@ -26,7 +26,7 @@
 @media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
 </style>
 <line x1="40" y1="46" x2="68" y2="46" stroke="#5E0ED7" stroke-width="2"/>
-<text class="m " x="80" y="51" font-size="13" letter-spacing="0.14em" fill="rgba(10,10,10,0.58)" text-anchor="start">RECOGNITION</text>
+<text class="m " x="80" y="51" font-size="13" letter-spacing="0.14em" fill="rgba(10,10,10,0.58)" text-anchor="start">02 · RECOGNITION</text>
 <g class="rise-in"><text class="s " x="40" y="118" font-size="56" font-weight="600" letter-spacing="-0.04em" fill="#0A0A0A" text-anchor="start">Recognized.</text></g>
 <g class="fade-in"><text class="s " x="40" y="160" font-size="18" font-weight="400" letter-spacing="0em" fill="rgba(10,10,10,0.58)" text-anchor="start">Judged by ETHGlobal sponsors, Monad Blitz, Grab, Meta's Llama accelerator and</text></g>
 <rect class="mark" x="399.58400000000006" y="172" width="171.88600000000002" height="20" fill="rgba(94,14,215,0.16)"/>

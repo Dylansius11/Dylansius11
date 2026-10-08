@@ -2,8 +2,9 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { THEMES } from "./lib.mjs";
 import { header } from "./header.mjs";
 import { recognition } from "./recognition.mjs";
-import { CARDS, card } from "./cards.mjs";
+import { CARDS, card, workHead } from "./cards.mjs";
 import { clients } from "./clients.mjs";
+import { BADGES, badge } from "./badges.mjs";
 import { footer } from "./footer.mjs";
 import { ticker } from "./ticker.mjs";
 
@@ -21,9 +22,11 @@ mkdirSync(OUT, { recursive: true });
 const ASSETS = {
   header,
   recognition,
+  "work-head": workHead,
   clients,
   ticker,
   footer,
+  ...Object.fromEntries(BADGES.map((b, i) => [`badge-${b.id}`, badge(b, i)])),
   ...Object.fromEntries(CARDS.map((c, i) => [`card-${c.id}`, card(c, i)])),
 };
 

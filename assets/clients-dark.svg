@@ -24,7 +24,7 @@
 @media (prefers-reduced-motion:reduce){*{animation-duration:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
 </style>
 <line x1="40" y1="46" x2="68" y2="46" stroke="#A47BFF" stroke-width="2"/>
-<text class="m " x="80" y="51" font-size="13" letter-spacing="0.14em" fill="rgba(248,247,244,0.6)" text-anchor="start">CLIENT WORK</text>
+<text class="m " x="80" y="51" font-size="13" letter-spacing="0.14em" fill="rgba(248,247,244,0.6)" text-anchor="start">03 · CLIENT WORK</text>
 <g class="rise-in"><text class="s " x="40" y="118" font-size="56" font-weight="600" letter-spacing="-0.04em" fill="#F8F7F4" text-anchor="start">Paid work.</text></g>
 <rect class="mark" x="275.78" y="145" width="333.93999999999994" height="20" fill="rgba(164,123,255,0.26)"/>
 <g class="fade-in"><text class="s " x="40" y="160" font-size="18" font-weight="400" letter-spacing="0em" fill="rgba(248,247,244,0.6)" text-anchor="start">Two systems clients paid for. I closed both deals and wrote code for both.</text></g>
