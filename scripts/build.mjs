@@ -4,6 +4,8 @@ import { header } from "./header.mjs";
 import { recognition } from "./recognition.mjs";
 import { CARDS, card } from "./cards.mjs";
 import { clients } from "./clients.mjs";
+import { footer } from "./footer.mjs";
+import { ticker } from "./ticker.mjs";
 
 /**
  * Builds every SVG on the profile, once per theme.
@@ -20,6 +22,8 @@ const ASSETS = {
   header,
   recognition,
   clients,
+  ticker,
+  footer,
   ...Object.fromEntries(CARDS.map((c, i) => [`card-${c.id}`, card(c, i)])),
 };
 
