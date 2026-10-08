@@ -3,6 +3,7 @@ import { THEMES } from "./lib.mjs";
 import { header } from "./header.mjs";
 import { recognition } from "./recognition.mjs";
 import { CARDS, card } from "./cards.mjs";
+import { clients } from "./clients.mjs";
 
 /**
  * Builds every SVG on the profile, once per theme.
@@ -18,6 +19,7 @@ mkdirSync(OUT, { recursive: true });
 const ASSETS = {
   header,
   recognition,
+  clients,
   ...Object.fromEntries(CARDS.map((c, i) => [`card-${c.id}`, card(c, i)])),
 };
 
